@@ -1,0 +1,32 @@
+name: manage-azure-policy-8f5f20ac
+on:
+  workflow_dispatch:
+    inputs:
+      remarks:
+        description: 'Reason for triggering the workflow run'
+        required: false
+        default: 'Updating Azure Policies'
+
+
+## Uncomment the following if you wish to automatically trigger workflow run with every commit
+#
+#  push:
+#    paths:
+#      - 'policies/_Preview_Certificates_should_not_expire_within_the_specified_number_of_days_f772fb64-8e40-40ad-87bc-7706e1949427/**'
+#      - .github/workflows/manage-azure-policy-8f5f20ac.yml
+jobs:
+  apply-azure-policy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS_8f5f20ac}}
+        allow-no-subscriptions: true
+    - name: Create or Update Azure Policies
+      uses: azure/manage-azure-policy@v0
+      with:
+        paths: |
+          policies/_Preview_Certificates_should_not_expire_within_the_specified_number_of_days_f772fb64-8e40-40ad-87bc-7706e1949427/**
